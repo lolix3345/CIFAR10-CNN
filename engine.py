@@ -57,13 +57,15 @@ class SoftmaxEngine():
                     print(f"{h_since_train_start:02}:{m_since_train_start:02}:{s_since_train_start:02} elapsed, epoch [{current_epoch+1}/{num_epochs}], batch [{current_batch}/{batch_per_epoch}], estimated {h_estimated:02}:{m_estimated:02}:{s_estimated:02} remaining, loss = {loss_sum/float(print_interval)}")
                     loss_sum = 0
                 """logging in tensorboard"""
-                self.logger.add_scalar("training loss", loss.item(), current_epoch*batch_per_epoch + current_batch)
+                if self.logger is not None:
+                    self.logger.add_scalar("training loss", loss.item(), current_epoch*batch_per_epoch + current_batch)
 
-            if current_epoch % eval_interval == 0:
+            if (current_epoch + 1) % eval_interval == 0:
                 print("computing test set accuracy...")
                 test_accuracy = self.compute_test_accuracy()
                 print(f"accuracy on test set : {(100*test_accuracy):.2f} %")
-                self.logger.add_scalar("testing accuracy", test_accuracy, (current_epoch+1)*batch_per_epoch)
+                if self.logger is not None:
+                    self.logger.add_scalar("testing accuracy", test_accuracy, (current_epoch+1)*batch_per_epoch)
 
     def compute_test_accuracy(self):
         self.model = self.model.to('cuda')
