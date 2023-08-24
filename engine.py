@@ -14,7 +14,9 @@ class SoftmaxEngine():
                  optimizer,
                  logger,
                  batch_size=32,
-                 num_workers=0):
+                 num_workers=0,
+                 use_gpu=True):
+        self.device = 'cuda' if use_gpu else 'cpu'
         self.model = model
         self.dataset = dataset
         self.test_dataset = test_dataset
@@ -26,7 +28,7 @@ class SoftmaxEngine():
         self.criterion = nn.CrossEntropyLoss()
         self.logger = logger
     def train(self, num_epochs=10, eval_interval=1, print_interval=10):
-        self.model = self.model.to('cuda')
+        self.model = self.model.to(self.device)
         self.model.train()
         train_start = time.time()
         batch_per_epoch = int(np.ceil(len(self.dataset)/self.batch_size))
@@ -37,7 +39,7 @@ class SoftmaxEngine():
             current_batch = 0
             for (x, labels) in iter(self.dataloader):
                 """Actual training step"""
-                x, labels = x.to('cuda'), labels.to('cuda')
+                x, labels = x.to(self.device), labels.to(self.device)
                 output = self.model(x)
                 loss = self.criterion(output, labels)
                 self.optimizer.zero_grad()
@@ -68,11 +70,11 @@ class SoftmaxEngine():
                     self.logger.add_scalar("testing accuracy", test_accuracy, (current_epoch+1)*batch_per_epoch)
 
     def compute_test_accuracy(self):
-        self.model = self.model.to('cuda')
+        self.model = self.model.to(self.device)
         self.model.eval()
         corrects = 0
         for x, labels in iter(self.test_dataloader):
-            x, labels = x.to('cuda'), labels.to('cuda')
+            x, labels = x.to(self.device), labels.to(self.device)
             preds = self.model(x)
             preds = torch.argmax(preds, dim=1)
             equals = (preds == labels)

@@ -53,6 +53,11 @@ def main():
         default='',
         help='name of the tensorboard log. If empty, there will be no logs'
     )
+    parser.add_argument(
+        '--use-gpu',
+        action='store_true',
+        help='Set this flag if you want to do training and inference with CUDA'
+    )
     args = parser.parse_args()
     train_dataset = Cifar10Dataset(root_dir=args.dataset_dir, split='train')
     test_dataset  = Cifar10Dataset(root_dir=args.dataset_dir, split='test')
@@ -65,7 +70,8 @@ def main():
                            optimizer=optimizer,
                            logger=logger,
                            batch_size=args.batch_size,
-                           num_workers=0)
+                           num_workers=0,
+                           use_gpu=args.use_gpu)
     engine.train(num_epochs=args.n_epochs, eval_interval=args.testing_interval, print_interval=args.printing_interval)
 
 if __name__ == '__main__':
