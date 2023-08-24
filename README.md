@@ -3,7 +3,7 @@ A CNN model and the script for training it on the CIFAR-10 dataset
 
 ## Requirements
 
-This program was developed with : 
+This program was developed on Python 3.8.16 with : 
 |Module|Version|
 |----|----|
 |Pytorch|2.0.1|
