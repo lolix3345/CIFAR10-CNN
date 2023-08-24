@@ -10,3 +10,4 @@ __pycache__/dataset.cpython-38.pyc
 __pycache__/engine.cpython-38.pyc
 __pycache__/misc.cpython-38.pyc
 log/test_log/events.out.tfevents.1692874611.DESKTOP-VOD1J4U.5600.0
+.idea/workspace.xml
