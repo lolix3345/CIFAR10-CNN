@@ -4,7 +4,6 @@ from torch.utils.data import DataLoader
 import time
 from misc import convert_seconds_to_hms
 import numpy as np
-import matplotlib.pyplot as plt
 
 class SoftmaxEngine():
     def __init__(self,
